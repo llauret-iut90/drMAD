@@ -2,6 +2,7 @@
   <div id="app">
     <nav-bar></nav-bar>
     <router-view/>
+    <v-img src="@/src/assets/drMAD.png" alt="Virus" ></v-img>
   </div>
 </template>
 
