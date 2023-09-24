@@ -1,20 +1,20 @@
 <template>
-  <nav class="bg-purple-600 py-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <router-link class="text-white text-2xl font-bold hover:text-green-300 " :to="{ name: 'home' }">Home</router-link>
-      <ul class="flex space-x-4">
+  <nav >
+    <div >
+      <router-link :to="{ name: 'home' }">Home</router-link>
+      <ul >
         <li>
-          <router-link class="text-white hover:text-green-300" :to="{ name: 'shopitems' }">
+          <router-link :to="{ name: 'shopitems' }">
             Shop
           </router-link>
         </li>
         <li>
-          <router-link class="text-white hover:text-green-300" :to="{ name: 'bankaccount' }">
+          <router-link :to="{ name: 'bankaccount' }">
             Bank Account
           </router-link>
         </li>
         <li>
-          <router-link class="text-white hover:text-green-300" :to="{ name: 'shoplogin' }">Login</router-link>
+          <router-link :to="{ name: 'shoplogin' }">Login</router-link>
         </li>
       </ul>
     </div>
