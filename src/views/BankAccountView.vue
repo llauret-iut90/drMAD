@@ -1,20 +1,20 @@
 <template>
-  <div class="p-4">
-    <h1 class="text-2xl font-semibold mb-4">Account</h1>
+  <div >
+    <h1 >Account</h1>
 
-    <div class="mb-4">
-      <label class="block mb-2">Number</label>
-      <input v-model="number" class="px-3 py-2 border rounded-md">
+    <div >
+      <label >Number</label>
+      <input v-model="number" >
     </div>
 
-    <button @click="getAccountAmount(number)" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+    <button @click="getAccountAmount(number)" >
       Submit
     </button>
 
     <p v-if="accountAmount" class="mt-4">{{ accountAmount }}</p>
 
     <button @click="getTransactions(number)"
-            class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 mt-4">See account transactions
+           >See account transactions
     </button>
 
     <div v-if="accountTransactions" class="mt-4">
