@@ -100,3 +100,130 @@ export default {
   },
 }
 </script>
+<style scoped>
+/* Style pour imiter un terminal Linux */
+
+body {
+  background-color: #000;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 20px;
+}
+
+h1 {
+  color: #00ff00;
+  font-size: 24px;
+}
+
+p {
+  margin: 10px 0;
+  color: #00ff00;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #00ff00;
+}
+
+label {
+  color: #00ff00;
+}
+
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  background-color: #000;
+  border: 2px solid #00ff00;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #00ff00;
+  border: 2px solid #00ff00;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 255, 0, 0.7);
+}
+
+
+input[type="text"] {
+  background-color: #000;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 3px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  background-color: #000;
+  color: #00ff00;
+  font-size: 16px;
+  padding: 5px;
+  border: 2px solid #00ff00;
+  border-radius: 3px;
+  width: 100px;
+  height: 30px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  background-color: #000;
+  color: #00ff00;
+  font-size: 12px;
+  width: 20px;
+  height: 30px;
+  border: 2px solid #00ff00;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type="number"]::-webkit-outer-spin-button:hover,
+input[type="number"]::-webkit-inner-spin-button:hover {
+  background-color: #00ff00;
+  border: 2px solid #00ff00;
+  color: #000;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border: 1px solid #00ff00;
+  padding: 8px;
+  text-align: left;
+  color: #00ff00;
+}
+
+th {
+  background-color: #00ff00;
+  color: #000;
+}
+
+tr:nth-child(even) {
+  background-color: #111;
+}
+
+span {
+  color: #00ff00;
+}
+
+</style>
