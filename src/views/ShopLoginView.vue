@@ -42,16 +42,7 @@ body {
   min-height: 100vh;
 }
 
-.container {
-  background-color: #111;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
-  text-align: center;
-}
-
 h1 {
-  color: #00ff00;
   font-size: 24px;
 }
 

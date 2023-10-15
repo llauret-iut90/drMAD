@@ -26,23 +26,19 @@
         <label for="filtername">Nom contenant :</label>
         <input v-model="nameFilter" id="filtername" type="text">
       </div>
-      <table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Stock</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(virus, index) in (filters)"
-            :key="index">
-          <td>{{ virus.name }}</td>
-          <td>{{ virus.price }}</td>
-          <td>{{ virus.stock }}</td>
-        </tr>
-        </tbody>
-      </table>
+
+      <CheckedList
+          :data="filters"
+          :fields="['name', 'price', 'stock']"
+          :itemCheck="true"
+          :checked="[]"
+          :itemButton="{ show: true, text: 'Item details' }"
+          :listButton="{ show: true, text: 'See select viruses' }"
+          @check-changed="handleCheckChanged"
+          @item-button-clicked="handleItemButtonClicked"
+          @list-button-clicked="handleListButtonClicked"
+      >
+      </CheckedList>
     </div>
   </div>
 </template>
@@ -52,15 +48,18 @@
 
 import {mapState} from 'vuex'
 import * as events from "events";
+import CheckedList from "@/components/CheckedList.vue";
 
 export default {
   name: 'VirusesView',
+  components: {CheckedList},
   data: () => ({
     priceFilter: 0,
     nameFilter: '',
     stockData: false,
     filterPriceActive: false,
     filterNameActive: false,
+    selectedViruses: [],
   }),
   computed: {
     events() {
@@ -81,9 +80,15 @@ export default {
     },
     filters() {
       let filteredViruses = this.viruses;
-      if (this.filterPriceActive) {filteredViruses = filteredViruses.filter(v => v.price <= this.priceFilter);}
-      if (this.filterNameActive) {filteredViruses = filteredViruses.filter(v => v.name.includes(this.nameFilter));}
-      if (this.stockData) {filteredViruses = filteredViruses.filter(v => v.stock > 0);}
+      if (this.filterPriceActive) {
+        filteredViruses = filteredViruses.filter(v => v.price <= this.priceFilter);
+      }
+      if (this.filterNameActive) {
+        filteredViruses = filteredViruses.filter(v => v.name.includes(this.nameFilter));
+      }
+      if (this.stockData) {
+        filteredViruses = filteredViruses.filter(v => v.stock > 0);
+      }
       return filteredViruses;
     }
 
@@ -97,11 +102,84 @@ export default {
         return false;
       }
     },
+    handleCheckChanged(checkedIndexes) {
+      console.log("VirusesView says: checkedIndexes = " + checkedIndexes)
+      this.selectedViruses += ' ' + '[' + checkedIndexes + ']'
+    },
+    handleItemButtonClicked(index) {
+      console.log("VirusesView says: item button clicked on index " + index)
+      alert("Price of " + this.viruses[index].name + " is " + this.viruses[index].price + "₿")
+    },
+    handleListButtonClicked() {
+      console.log("VirusesView says: selectedViruses = " + this.selectedViruses)
+    }
   },
 }
 </script>
 <style scoped>
-/* Style pour imiter un terminal Linux */
+
+/* ./src/index.css */
+button {
+  background-color: #000;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: #007f00;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  background-color: #000;
+  border: 2px solid #00ff00;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #00ff00;
+  border: 2px solid #00ff00;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 255, 0, 0.7);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border: 1px solid #00ff00;
+  padding: 8px;
+  text-align: left;
+  color: #00ff00;
+}
+
+th {
+  background-color: #00ff00;
+  color: #000;
+}
+
+tr:nth-child(even) {
+  background-color: #111;
+}
+
+span {
+  color: #00ff00;
+}
 
 body {
   background-color: #000;
@@ -225,5 +303,4 @@ tr:nth-child(even) {
 span {
   color: #00ff00;
 }
-
 </style>

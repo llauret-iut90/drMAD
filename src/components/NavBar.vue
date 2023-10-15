@@ -1,14 +1,29 @@
 <template>
+  <!--  <nav>-->
+  <!--    <div class="nav-links">-->
+  <!--      <router-link :to="{ name: 'home' }">Home</router-link>-->
+  <!--      <router-link :to="{ name: 'shopitems' }">Shop</router-link>-->
+  <!--      <router-link :to="{ name: 'bankaccount' }">Bank Account</router-link>-->
+  <!--      <router-link :to="{ name: 'shoplogin' }">Login</router-link>-->
+  <!--    </div>-->
+  <!--  </nav>-->
   <nav>
     <div class="nav-links">
-      <router-link :to="{ name: 'home' }">Home</router-link>
-      <router-link :to="{ name: 'shopitems' }">Shop</router-link>
-      <router-link :to="{ name: 'bankaccount' }">Bank Account</router-link>
-      <router-link :to="{ name: 'shoplogin' }">Login</router-link>
+      <router-link v-for="(title, index) in titles"
+                   :key="index"
+                   :to="title.path">
+        {{ title.title }}
+      </router-link>
     </div>
   </nav>
 </template>
 
+<script>
+export default {
+  name: 'NavBar',
+  props: {titles: Array}
+}
+</script>
 
 <style scoped>
 nav .nav-links {

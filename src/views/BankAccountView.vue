@@ -23,7 +23,7 @@
         <p>Account number valid</p>
         <p v-if="accountAmount">{{ accountAmount }}</p>
 
-        <div v-if="accountTransactions">
+        <div v-if="accountTransactions.length > 0">
           <p>Transactions</p>
           <table>
             <thead>

@@ -1,0 +1,2 @@
+- [ ] Modifier l'alerte js pour qu'elle soit plus jolie
+- [ ] Corriger le fond d'écran

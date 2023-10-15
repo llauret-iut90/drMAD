@@ -1,6 +1,6 @@
 <template>
-  <div class="app">
-    <nav-bar></nav-bar>
+  <div id="app">
+    <NavBar :titles="titles"></NavBar>
     <router-view/>
   </div>
 </template>
@@ -14,9 +14,16 @@ export default {
   name: 'App',
   components: {NavBar},
 
-  data: () => ({
-    //
-  }),
+  data: () => {
+    return {
+      titles: [
+        {title: 'Home', path: '/home'},
+        {title: 'Shop', path: '/shop/items'},
+        {title: 'Bank Account', path: '/bank/account'},
+        {title: 'Login', path: '/shop/login'}
+      ]
+    }
+  },
   methods: {
     ...mapActions(['getAllViruses'])
   },
@@ -25,21 +32,5 @@ export default {
   }
 };
 </script>
-<style scoped>
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 98.3vh;
-  font-family: 'Inconsolata', monospace;
-  background-color: #000000;
-  background-color: rgba(0, 0, 0, 0.10);
-  background-image: url("@/assets/black_man_laughing_in_the_dark.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-a {
-  color: #00ff00;
-}
+<style>
 </style>
