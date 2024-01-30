@@ -2,6 +2,10 @@
   <div id="app">
     <NavBar :titles="titles"></NavBar>
     <router-view/>
+    <div style="color: aliceblue">
+      <p v-if="shopUser"> Welcome : {{ shopUser.login }}</p>
+      <p v-else> Log or get out</p>
+    </div>
   </div>
 </template>
 
@@ -17,11 +21,17 @@ export default {
   data: () => {
     return {
       titles: [
-        {title: 'Home', path: '/home'},
-        {title: 'Shop', path: '/shop/items'},
+        {title: 'Shop', path: '/shop/buy'},
+        {title: 'Pay', path: '/shop/pay'},
+        {title: 'Orders', path: '/shop/orders'},
         {title: 'Bank Account', path: '/bank/account'},
         {title: 'Login', path: '/shop/login'}
       ]
+    }
+  },
+  computed: {
+    shopUser() {
+      return this.$store.state.shop.shopUser
     }
   },
   methods: {

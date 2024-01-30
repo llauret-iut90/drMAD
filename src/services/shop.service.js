@@ -24,7 +24,6 @@ async function getAllVirusesFromAPI() {
 }
 */
 
-
 async function shopLogin(data) {
     let response = null;
     try {
@@ -52,7 +51,36 @@ async function getAllViruses() {
     return response
 }
 
+async function updateBasket(user, basket) {
+    console.log(`mise à jour du panier pour l'utilisateur ${user.name} avec les données suivantes :`, basket);
+    return {error: 0, data: basket}
+}
+
+async function createOrderFromBasket(shopUser) {
+    return {
+        items: shopUser.basket.items,
+        date: new Date(),
+        amount: shopUser.basket.items.reduce((acc, item) => acc + item.amount * item.item.price, 0),
+        status: 'waiting_payment',
+        uuid: shopUser.uuid
+    }
+}
+
+
+async function verifyOrder(orderId, userId) {
+    const orders = await LocalSource.getOrder(userId);
+    return orders.find(order => order.id === orderId);
+}
+
+async function getOrder(userId) {
+    return LocalSource.getOrder(userId);
+}
+
 export default {
     shopLogin,
     getAllViruses,
+    updateBasket,
+    createOrderFromBasket,
+    verifyOrder,
+    getOrder
 }

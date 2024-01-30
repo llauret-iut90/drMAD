@@ -1,32 +1,44 @@
 <template>
   <div>
-    <table v-if="itemCheck">
+    <table>
       <thead>
       <tr>
-        <th style="width: 1%;">Check</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Details</th>
+        <th v-if="itemCheck"></th>
+        <th v-for="(field, index) in fields" :key="index">
+          {{ field }}
+        </th>
+        <th v-if="itemAmount"></th>
+        <th v-if="itemButton"></th>
       </tr>
       </thead>
+
       <tbody>
       <tr v-for="(item, index) in data" :key="index">
-        <input type="checkbox" :checked="checked.includes(item[fields[0]])" @click="$emit('check-changed', index)">
-        <td>{{ item[fields[0]] }}</td>
-        <td>{{ item[fields[1]] }}</td>
-        <td>{{ item[fields[2]] }}</td>
+        <td v-if="itemCheck">
+          <input type="checkbox" :checked="checked[index] ?? false "
+                 @change="$emit('check-toggled', index, $event.target.checked)">
+        </td>
+        <td v-for="(field, index) in fields" :key="index">
+          {{ field === 'Price' ? calculatePrice(item) : getField(item, field) }}
+        </td>
+        <td v-if="itemAmount">
+          <input type="number" value="0" min="0"
+                 v-model="amounts[index]"
+                 @change="$emit('amount-changed', index, $event.target.value)">
+        </td>
         <td>
-          <button v-if="itemButton" @click="$emit('item-button-clicked', index)">{{ itemButton.text }}</button>
+          <button v-if="itemButton.show" @click="$emit('item-button-clicked', index)">{{ itemButton.text }}</button>
         </td>
       </tr>
       </tbody>
+
     </table>
-    <button v-if="listButton" @click="$emit('list-button-clicked')">{{ listButton.text }}</button>
+    <button v-if="listButton.show" @click="$emit('list-button-clicked')">{{ listButton.text }}</button>
   </div>
 </template>
 
 <script>
+
 
 export default {
   name: 'CheckedList',
@@ -36,10 +48,29 @@ export default {
     itemCheck: Boolean, // s'il y a des case à cocher
     checked: Array, // le tableau des cases cochées
     itemButton: Object, // l'objet pour les boutons d'items
-    listButton: Object, // l'objet pour le bouton de liste
+    listButton: Object, // l'objet pour le bouton de liste,
+    itemAmount: Boolean,
+  },
+  created() {
+    console.log(this.itemAmount);
   },
   data: () => {
-    return {}
+    return {
+      amounts: [],
+    }
+  },
+  methods: {
+    calculatePrice(item) {
+      return item.item.price * item.amount;
+    },
+    getField(item, field) {
+      const keys = field.split('.');
+      let value = item;
+      for (let key of keys) {
+        value = value[key];
+      }
+      return value;
+    },
   }
 }
 </script>

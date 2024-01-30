@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="center">
     <h1>Login</h1>
 
     <span>login</span><input v-model="login">
     <span>password</span><input v-model="password">
     <button @click="shopLogin({login, password})">Login</button>
-    <p v-if="shopUser">{{shopUser}}</p>
   </div>
 
 </template>
@@ -13,22 +12,26 @@
 <script>
 
 import {mapState, mapActions} from 'vuex'
+
 export default {
   name: 'ShopLoginView',
   data: () => ({
     login: '',
-    password:'',
+    password: '',
   }),
   computed: {
-    ...mapState(['shopUser'])
+    ...mapState({
+      shopUser: (state) => state.shopUser
+    }),
   },
   methods: {
-    ...mapActions(['shopLogin']),
+    ...mapActions({
+      shopLogin: 'shopLogin'
+    }),
   }
 }
 </script>
 <style scoped>
-/* Styles pour imiter un terminal Linux */
 
 body {
   background-color: #000;
@@ -79,6 +82,5 @@ p {
   margin-top: 10px;
 }
 
-/* Ajoutez ici d'autres styles spécifiques au besoin */
 
 </style>

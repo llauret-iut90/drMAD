@@ -1,4 +1,4 @@
-import {items, shopusers, bankaccounts, transactions} from './data'
+import {bankaccounts, items, shopusers, transactions} from './data'
 import {v4 as uuidv4} from 'uuid'
 
 /* controllers: les fonctions ci-dessous doivent mimer ce que renvoie l'API en fonction des requêtes possibles.
@@ -13,13 +13,32 @@ import {v4 as uuidv4} from 'uuid'
 
 function shopLogin(data) {
     if ((!data.login) || (!data.password)) return {error: 1, status: 404, data: 'aucun login/pass fourni'}
-    let user = shopusers.find(e => e.login === data.login)
-    if (!user) return {error: 1, status: 404, data: 'login/pass incorrect'}
-    // générer un uid pour l'utilisateur si non existant
+    let user = shopusers.find(e => e.login === data.login && e.password === data.password)
+    console.log('je suis dans le controller')
+    console.log(user)
+    console.log("je suis mort")
+    if (!user) return {error: 1, status: 404, data: 'login or password incorrect'}
     if (!user.uuid) {
         user.uuid = uuidv4()
     }
-    return {error: 0, status: 200, data: user}
+    if (!user.basket) {
+        user.basket = {items: []};
+    }
+
+
+    return {
+        error: 0,
+        status: 200,
+        data: {
+            name: user.name,
+            login: user.login,
+            email: user.email,
+            session: user.session,
+            basket: user.basket,
+            orders: user.orders,
+            uuid: user.uuid
+        }
+    }
 }
 
 function getAllViruses() {
@@ -41,9 +60,36 @@ function getTransactions(number) {
     return {error: 0, status: 200, data: transactionsList}
 }
 
+// function createOrderFromBasket() {
+//     const basket = store.state.shop.shopUser.basket;
+//     return {
+//         items: basket.map(item => ({
+//             item: {
+//                 name: item.name,
+//                 description: item.description,
+//                 price: item.price,
+//                 promotion: item.promotion,
+//                 object: item.object
+//             },
+//             amount: item.amount
+//         })),
+//         date: new Date(),
+//         total: basket.reduce((total, item) => total + item.price * item.amount, 0),
+//         status: 'waiting_payment',
+//         uuid: uuidv4()
+//     };
+// }
+
+function getOrder(orderId, userId) {
+    const orders = shopusers.find(user => user.id === userId).orders;
+    return orders.find(order => order.id === orderId);
+}
+
 export default {
     shopLogin,
     getAllViruses,
     getAccountAmount,
-    getTransactions
+    getTransactions,
+    // createOrderFromBasket,
+    getOrder
 }

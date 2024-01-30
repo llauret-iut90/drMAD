@@ -1,8 +1,7 @@
 <template>
   <div>
     <h1>Viruses</h1>
-    <p>Store's array : {{ viruses }}</p>
-    <p>List format</p>
+    <!--        <p> {{ items }}</p>-->
     <hr>
     <div>
       <span>Filters :</span><label for="filterpriceactive">Per price</label><input type="checkbox"
@@ -29,61 +28,59 @@
 
       <CheckedList
           :data="filters"
-          :fields="['name', 'price', 'stock']"
+          :fields="['name', 'price','promotion']"
           :itemCheck="true"
-          :item-amount="true"
-          :checked="selectedViruses"
-          :itemButton="{ show: true, text: 'Item details' }"
-          :listButton="{ show: true, text: 'See selected viruses' }"
+          :checked="selectedItems"
+          :itemButton="{show: true, text: 'Add to cart'}"
+          :listButton="{show: true, text: 'Add all to cart'}"
+          :itemAmount="true"
           @check-toggled="handleCheckChanged"
           @item-button-clicked="handleItemButtonClicked"
           @list-button-clicked="handleListButtonClicked"
           @amount-changed="handleAmountChanged"
           @reset-checks="resetCheckboxes"
-      >
-      </CheckedList>
+      />
     </div>
   </div>
 </template>
 
-
 <script>
-import * as events from "events";
-import CheckedList from "@/components/CheckedList.vue";
-import {mapState} from "vuex";
+import {mapState} from 'vuex';
+import CheckedList from './CheckedList.vue';
 
 export default {
-  name: 'VirusesView',
-  components: {CheckedList},
-  data: () => ({
-    priceFilter: 0,
-    nameFilter: '',
-    stockData: false,
-    filterPriceActive: false,
-    filterNameActive: false,
-    selectedViruses: []
-  }),
+  name: 'ItemsList',
+  components: {
+    CheckedList,
+  },
+  data() {
+    return {
+      selectedItems: [],
+      priceFilter: 0,
+      nameFilter: '',
+      stockData: false,
+      filterPriceActive: false,
+      filterNameActive: false,
+    };
+  },
   computed: {
-    events() {
-      return events
-    },
     ...mapState({
-      viruses: state => state.shop.viruses
+      items: state => state.shop.viruses,
     }),
     filterVirusesByPrice() {
-      if (this.priceFilter > 0) return this.viruses.filter(v => v.price <= this.priceFilter)
-      return this.viruses
+      if (this.priceFilter > 0) return this.items.filter(v => v.price <= this.priceFilter)
+      return this.items
     },
     filterVirusesByName() {
-      if (this.nameFilter) return this.viruses.filter(v => v.name.includes(this.nameFilter))
-      return this.viruses
+      if (this.nameFilter) return this.items.filter(v => v.name.includes(this.nameFilter))
+      return this.items
     },
     filterVirusesByStock() {
-      if (this.stockData) return this.viruses.filter(v => v.stock > 0)
-      return this.viruses
+      if (this.stockData) return this.items.filter(v => v.stock > 0)
+      return this.items
     },
     filters() {
-      let filteredViruses = this.viruses;
+      let filteredViruses = this.items;
       if (this.filterPriceActive) {
         filteredViruses = filteredViruses.filter(v => v.price <= this.priceFilter);
       }
@@ -94,10 +91,10 @@ export default {
         filteredViruses = filteredViruses.filter(v => v.stock > 0);
       }
       return filteredViruses;
-    }
-  },
-  created() {
-    console.log(this.$store.state)
+    },
+    // promotion() {
+    //   return this.data.map(item => item[this.fields[2]].map(promo => promo.discount + '%').join(' | '));
+    // }
   },
   methods: {
     allowNumbersOnly(event) {
@@ -109,24 +106,36 @@ export default {
       }
     },
     resetCheckboxes() {
-      for (let i = 0; i < this.selectedViruses.length; i++) {
-        this.$set(this.selectedViruses, i, false)
+      for (let i = 0; i < this.selectedItems.length; i++) {
+        if (this.selectedItems[i] && typeof this.selectedItems[i] === 'object') {
+          this.$set(this.selectedItems[i], 'amount', 0);
+        }
+        this.$set(this.selectedItems, i, false)
       }
     },
     handleCheckChanged(index, checkedIndexes) {
       console.log("VirusesView says: checkedIndexes = " + checkedIndexes)
-      this.$set(this.selectedViruses, index, checkedIndexes)
+      this.$set(this.selectedItems, index, checkedIndexes)
     },
     handleItemButtonClicked(index) {
-      console.log("VirusesView says: item button clicked on index " + index)
-      alert("Price of " + this.viruses[index].name + " is " + this.viruses[index].price + "₿" + "\n" + "Sold T/F : " + this.viruses[index].sold + "\nStock: " + this.viruses[index].stock)
+      // console.log("VirusesView says: item button clicked on index " + index)
+      // alert("Price of " + this.filters[index].name + " is " + this.filters[index].price + "₿" + "\n" + "Sold T/F : " + this.filters[index].sold + "\nStock: " + this.filters[index].stock)
+      console.log("j'ajoute dans le panier");
+      const item = this.filters[index];
+      const amount = parseInt(this.selectedItems[index].amount, 10);
+      this.$store.dispatch('addToBasket', {item: item, amount: amount});
     },
     handleListButtonClicked() {
       let result = "List of checked viruses: \n\n";
-      console.log(this.selectedViruses)
-      for (let [index, checked] of Object.entries(this.selectedViruses)) {
+      for (let [index, checked] of Object.entries(this.selectedItems)) {
         if (checked) {
-          result += `Name: ${this.viruses[index].name}\n Amount : ${this.selectedViruses[index].amount} \n\n`
+          console.log("VirusesView says: list button clicked on index " + index)
+          console.log(this.selectedItems);
+          result += `Name: ${this.filters[index].name}\n Amount : ${this.selectedItems[index].amount} \n\n`
+
+          const item = this.filters[index];
+          const amount = parseInt(this.selectedItems[index].amount, 10);
+          this.$store.dispatch('addToBasket', {item: item, amount: amount});
         }
       }
       alert(result);
@@ -134,11 +143,11 @@ export default {
     },
     handleAmountChanged(index, amount) {
       console.log("VirusesView says: amount changed on index " + index + " to " + amount)
-      console.log(this.viruses[index].name + " " + amount)
-      this.$set(this.selectedViruses, index, {amount: amount})
-    }
-  }
-}
+      console.log(this.items[index].name + " " + amount)
+      this.$set(this.selectedItems, index, {amount: amount})
+    },
+  },
+};
 </script>
 <style scoped>
 
