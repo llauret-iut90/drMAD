@@ -9,6 +9,7 @@
         </th>
         <th v-if="itemAmount"></th>
         <th v-if="itemButton"></th>
+        <th v-if="cancelButton"></th>
       </tr>
       </thead>
 
@@ -27,7 +28,13 @@
                  @change="$emit('amount-changed', index, $event.target.value)">
         </td>
         <td>
-          <button v-if="itemButton.show" @click="$emit('item-button-clicked', index)">{{ itemButton.text }}</button>
+          <button v-if="typeof itemButton.show === 'function' ? itemButton.show(index) : itemButton.show"
+                  @click="$emit('item-button-clicked', index)">{{ itemButton.text }}
+          </button>
+          <!--          <button v-if="cancelButton.show" @click="$emit('item-cancel-button-clicked', index)">{{ cancelButton.text }}</button>-->
+          <button v-if="typeof cancelButton.show === 'function' ? cancelButton.show(index) : cancelButton.show"
+                  @click="$emit('item-cancel-button-clicked', index)">{{ cancelButton.text }}
+          </button>
         </td>
       </tr>
       </tbody>
@@ -49,6 +56,7 @@ export default {
     checked: Array, // le tableau des cases cochées
     itemButton: Object, // l'objet pour les boutons d'items
     listButton: Object, // l'objet pour le bouton de liste,
+    cancelButton: Object,
     itemAmount: Boolean,
   },
   created() {

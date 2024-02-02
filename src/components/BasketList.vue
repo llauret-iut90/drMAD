@@ -4,6 +4,7 @@
       :fields="['item.name', 'amount', 'Price']"
       :item-button="{show: true, text: 'Remove'}"
       :list-button="{show: true, text: 'Buy'}"
+      :cancel-button="{show: false}"
       @item-button-clicked="deleteItemFromBasket"
       @list-button-clicked="basketToOrder"
   />
@@ -35,7 +36,7 @@ export default {
     basketToOrder() {
       this.$store.dispatch('createOrder').then((order) => {
         alert('uuid: ' + order.uuid);
-        this.$store.dispatch('removeItemFromBasket')
+        this.$store.dispatch('clearBasket')
       })
     }
   }

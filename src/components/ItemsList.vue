@@ -33,6 +33,7 @@
           :checked="selectedItems"
           :itemButton="{show: true, text: 'Add to cart'}"
           :listButton="{show: true, text: 'Add all to cart'}"
+          :cancel-button="{show: false}"
           :itemAmount="true"
           @check-toggled="handleCheckChanged"
           @item-button-clicked="handleItemButtonClicked"

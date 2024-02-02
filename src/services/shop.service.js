@@ -1,4 +1,5 @@
 import LocalSource from "@/datasource/controller";
+import {v4 as uuidv4} from 'uuid';
 
 async function shopLoginFromLocalSource(data) {
     // rÃ©cupÃ©ration auprÃ¨s de la source locale
@@ -57,12 +58,13 @@ async function updateBasket(user, basket) {
 }
 
 async function createOrderFromBasket(shopUser) {
+    const uuid = uuidv4();
     return {
         items: shopUser.basket.items,
         date: new Date(),
         amount: shopUser.basket.items.reduce((acc, item) => acc + item.amount * item.item.price, 0),
         status: 'waiting_payment',
-        uuid: shopUser.uuid
+        uuid: uuid
     }
 }
 

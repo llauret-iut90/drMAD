@@ -4,14 +4,16 @@
 
     <CheckedList
         :data="orders"
-        :fields="['Due', 'status']"
+        :fields="['amount', 'status', 'uuid']"
         :itemCheck="false"
         :checked="[]"
-        :itemButton="{show: true, text: 'Buy'}"
-        :itemCancelButton="{show: true, text: 'Cancel'}"
-        :itemAmount="false"
+        :itemButton="{show: isStatus, text: 'Buy'}"
+        :cancelButton="({show: isStatus, text: 'Cancel'})"
         :list-button="{show: false}"
+        :itemAmount="false"
         :buy-button="{show: false}"
+        @item-button-clicked="itemButtonBuy"
+        @item-cancel-button-clicked="itemButtonCancel"
     />
   </div>
 </template>
@@ -34,24 +36,21 @@ export default {
     }
   },
   methods: {
-    itemButtonBuy(item) {
-      this.$router.push('/shop/pay/' + item.orderId);
+    test() {
+      console.log('test');
     },
-    itemButtonCancel() {
-      this.item.status = 'cancelled';
+    isStatus(index) {
+      return this.orders[index].status === 'waiting_payment';
     },
-    listButtonClicked() {
-      this.$emit('list-button-clicked')
+    itemButtonBuy(index) {
+      console.log('JE FINALISE LA COMMANDE');
+      this.orders[index].status = 'finalized';
     },
-    handleCheckChanged(checked) {
-      this.$emit('check-toggled', checked)
+    itemButtonCancel(index) {
+      console.log('JE CANCEL LA COMMANDE');
+      this.orders[index].status = 'cancelled';
+      this.$store.dispatch('cancelOrder', this.orders[index]);
     },
-    handleAmountChanged(amount) {
-      this.$emit('amount-changed', amount)
-    },
-    resetCheckboxes() {
-      this.$emit('reset-checks')
-    }
   }
 }
 </script>

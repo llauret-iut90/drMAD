@@ -98,6 +98,20 @@ const actions = {
         console.log('J"ai tué l"item');
         commit('removeItemFromBasket', item);
     },
+
+    async clearBasket({state}) {
+        console.log('je vide le panier');
+        state.shopUser.basket.items = [];
+    },
+    async cancelOrder({state}, orderId) {
+        console.log('je cancel la commande');
+        const index = state.shopUser.orders.findIndex(order => order.id === orderId);
+        if (index === -1) {
+            state.shopUser.orders.splice(index, 1);
+        }
+        console.log(index);
+    },
+
     async createOrder({commit, state}) {
         console.log('COUCOU JE PASSE COMMANDE');
         const order = await ShopService.createOrderFromBasket(state.shopUser);

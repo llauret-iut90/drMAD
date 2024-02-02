@@ -23,9 +23,8 @@ export default {
     shopUser() {
       return this.$store.state.shop.shopUser
     },
-    ...mapActions(['shopLogin']),
     filteredTitles() {
-      if (!this.shopLogin) {
+      if (Object.keys(this.shopUser).length === 0) { //https://www.freecodecamp.org/news/check-if-an-object-is-empty-in-javascript/
         return this.titles.filter(title => title.title === 'Login');
       } else {
         return this.titles.map(title => {
@@ -38,6 +37,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['shopLogin']),
     async logout() {
       await this.$store.dispatch('logout');
       console.log(this.$store.state.shop.shopUser);
