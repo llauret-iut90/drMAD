@@ -44,7 +44,9 @@ export default {
     },
     itemButtonBuy(index) {
       console.log('JE FINALISE LA COMMANDE');
-      this.orders[index].status = 'finalized';
+      // this.orders[index].status = 'finalized';
+      let uuid = this.orders[index].uuid;
+      this.$router.push({name: 'shoppay', params: {orderId: uuid, orderIndex: index}});
     },
     itemButtonCancel(index) {
       console.log('JE CANCEL LA COMMANDE');

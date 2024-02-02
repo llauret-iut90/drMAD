@@ -1,3 +1,4 @@
 - [ ] Modifier l'alerte js pour qu'elle soit plus jolie
 - [ ] Corriger le fond d'écran
 - [ ] Corriger le reset du inputnumber, les checkbox fonctionnet mais pas le inputnumber
+- bien mettre les promotions dans le calcul du prix

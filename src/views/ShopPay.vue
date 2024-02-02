@@ -6,26 +6,23 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
 
 export default {
   name: 'ShopPay',
-  props: {
-    id: String
-  },
+  // [Vue warn]: Computed property "orderId" was assigned to but it has no setter
+  // je dois utiliser data au lieu de computed sinon rip
   data() {
     return {
-      orderId: this.id || ''
-    }
+      orderId: this.$route.params.orderId || '',
+      orderIndex: this.$route.params.orderIndex || null,
+      orders: this.$store.state.shop.shopUser.orders
+    };
   },
   methods: {
-    ...mapActions(['finalizeOrder']),
-    async payOrder() {
-      try {
-        await this.finalizeOrder(this.orderId);
-      } catch (error) {
-        alert('Erreur : ' + error.message);
-      }
+    payOrder() {
+      console.log('je paye la commande');
+      this.orders[this.orderIndex].status = 'finalized';
+      this.orderId = '';
     }
   }
 }
