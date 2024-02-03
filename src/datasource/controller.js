@@ -52,7 +52,10 @@ function getOrder(orderId, userId) {
 
 function getAccountAmount(number) {
     if (number === undefined || number === "") return {error: 1, status: 404, data: 'empty number'}
+    console.log("number " + number)
     let account = bankaccounts.find(e => e.number === number)
+    console.log("je suis dans le getAccountAmount")
+    console.log("compte " + account)
     if (!account) return {error: 1, status: 404, data: 'unknown account'}
     return {error: 0, data: account.amount}
 }
@@ -66,7 +69,7 @@ function getAccountAmount(number) {
 // }
 
 function getAccount(number) {
-    console.log("je get le compte")
+    console.log("je get le compte, je suis dans le controller getAccount")
     if (number === "" || number === undefined) return {error: 1, status: 404, data: 'empty number'};
     const res = bankaccounts.find((account) => account.number === number);
     console.log(res)

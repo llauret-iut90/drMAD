@@ -20,3 +20,4 @@
 - manipulation directe de la source de données locale, sans passer par le contrôleur et les services. à corriger
 - fixer cette navbar de mort
 - régler basketlist jsp pourquoi ça crash une fois sur deux car currentbasket est undefined
+- changer les objectKey en ...mapState(['shopUser'])

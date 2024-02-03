@@ -1,6 +1,7 @@
 import BankService from '../services/bankaccount.service'
 
 const state = () => ({
+    accountNumber: '',
     accountAmount: 0,
     accountTransactions: [],
     accountNumberError: 0,
@@ -16,12 +17,17 @@ const mutations = {
     updateAccountNumberError(state, error) {
         state.accountNumberError = error
     },
+    updateAccountNumber(state, number) {
+        state.accountNumber = number
+    }
 }
 
 const actions = {
     async getAccountAmount({commit}, number) {
         console.log('récupération du solde du compte');
         let response = await BankService.getAccountAmount(number)
+        console.log("je suis dans le store de la bank dans getAccountAmount")
+        console.log("salut " + response.data)
         if (response.error === 0) {
             commit('updateAccountAmount', response.data)
             commit('updateAccountNumberError', 1)
@@ -46,7 +52,10 @@ const actions = {
         console.log('récupération du compte');
         let response = await BankService.getAccount(number)
         console.log(response)
-        commit('updateAccountAmount', response.data.amount)
+        commit('updateAccountNumber', response.data)
+    },
+    async resetAccountNumber({commit}) {
+        commit('updateAccountNumber', '')
     },
     async createWithdraw({commit}, {id_account, amount}) {
         console.log('création du retrait');
