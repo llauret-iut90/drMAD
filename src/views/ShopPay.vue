@@ -28,6 +28,7 @@ export default {
     payOrder() {
       console.log('je paye la commande');
       this.orders[this.orderIndex].status = 'finalized';
+      alert('Commande payée ' + this.orderId);
       this.orderId = '';
     }
   }

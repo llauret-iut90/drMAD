@@ -1,51 +1,37 @@
 <template>
   <nav>
     <div class="nav-links">
-      <router-link v-for="(title, index) in filteredTitles"
-                   :key="index"
-                   :to="title.path"
-                   @click.native="title.title === 'Logout' ? logout() : null"
+      <button v-for="(link, index) in links"
+              :key="index"
+              @click="goTo(link.to)"
       >
-        {{ title.title }}
-      </router-link>
+        <slot name="nav-button" :label="link.label">{{ link.label }}</slot>
+      </button>
+      <button v-if="Object.keys(shopUser).length > 0"
+              @click="logout"
+      >Logout
+      </button>
     </div>
   </nav>
 </template>
-
 <script>
-
-import {mapActions} from "vuex";
-
 export default {
   name: 'NavBar',
-  props: {titles: Array},
+  props: {links: Array},
   computed: {
     shopUser() {
       return this.$store.state.shop.shopUser
     },
-    filteredTitles() {
-      if (Object.keys(this.shopUser).length === 0) { //https://www.freecodecamp.org/news/check-if-an-object-is-empty-in-javascript/
-        return this.titles.filter(title => title.title === 'Login');
-      } else {
-        return this.titles.map(title => {
-          if (title.title === 'Login') {
-            return {...title, title: 'Logout'};
-          }
-          return title;
-        });
-      }
-    }
   },
   methods: {
-    ...mapActions(['shopLogin']),
-    async logout() {
-      await this.$store.dispatch('logout');
-      console.log(this.$store.state.shop.shopUser);
-      if (this.$route.path !== '/shop/login') {
-        await this.$router.push('/shop/login');
-        console.log(this.$route.path);
-      }
-    }
+    goTo(dest) {
+      this.$router.push(dest);
+    },
+    logout() {
+      console.log('logout');
+      this.$store.dispatch('logout')
+      this.$router.push('/shop/login');
+    },
   }
 }
 </script>

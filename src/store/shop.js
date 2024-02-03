@@ -1,6 +1,5 @@
 import ShopService from '../services/shop.service'
 import router from "@/router";
-import {shopusers} from "@/datasource/data";
 
 const state = () => ({
     viruses: [], shopUser: {},
@@ -42,8 +41,9 @@ const mutations = {
 const actions = {
     async shopLogin({commit}, data) {
         console.log('trying to log in');
+        console.log('shopLogin action called with:', { data });
         let response = await ShopService.shopLogin(data)
-        console.log("\"je suis dans le store \" + ")
+        console.log("\"je suis dans le store de shop \" + ")
         console.log(response.data)
         console.log("JE SUIS MORT")
         if (response.error === 0) {
@@ -52,20 +52,17 @@ const actions = {
             await commit('updateShopUser', response.data)
             console.log("------------------------------------")
             await router.push('/shop/buy')
-            console.log("je suis loggé")
-            console.log(shopusers)
+            console.log("je suis loggé en tant que :")
+            console.log(state.shopUser)
         } else {
             console.log("erreur de login")
             console.log(response.data)
         }
     },
     logout({commit}) {
-        return new Promise((resolve) => {
-            console.log('trying to log out');
-            commit('updateShopUser', {});
-            console.log(state.shopUser);
-            resolve();
-        });
+        console.log('trying to log out');
+        commit('updateShopUser', {});
+        console.log(state.shopUser);
     },
     async getAllViruses({commit}) {
         console.log('récupération des viruses');

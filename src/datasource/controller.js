@@ -14,7 +14,7 @@ import {v4 as uuidv4} from 'uuid'
 function shopLogin(data) {
     if ((!data.login) || (!data.password)) return {error: 1, status: 404, data: 'aucun login/pass fourni'}
     let user = shopusers.find(e => e.login === data.login && e.password === data.password)
-    console.log('je suis dans le controller')
+    console.log('je suis dans le controller pour shoplogin')
     console.log(user)
     console.log("je suis mort")
     if (!user) return {error: 1, status: 404, data: 'login or password incorrect'}
@@ -45,51 +45,113 @@ function getAllViruses() {
     return {error: 0, data: items}
 }
 
-function getAccountAmount(number) {
-    if (number === undefined || number === "") return {error: 1, status: 404, data: 'aucun numéro de compte fourni'}
-    let account = bankaccounts.find(e => e.number === number)
-    if (!account) return {error: 1, status: 404, data: 'compte inconnu'}
-    return {error: 0, data: account.amount}
-}
-
-function getTransactions(number) {
-    if (number === undefined || number === "") return {error: 1, status: 404, data: 'aucun numéro de compte fourni'}
-    let account = bankaccounts.find(e => e.number === number)
-    if (!account) return {error: 1, status: 404, data: 'compte inconnu'}
-    let transactionsList = transactions.filter(e => e.account === account._id)
-    return {error: 0, status: 200, data: transactionsList}
-}
-
-// function createOrderFromBasket() {
-//     const basket = store.state.shop.shopUser.basket;
-//     return {
-//         items: basket.map(item => ({
-//             item: {
-//                 name: item.name,
-//                 description: item.description,
-//                 price: item.price,
-//                 promotion: item.promotion,
-//                 object: item.object
-//             },
-//             amount: item.amount
-//         })),
-//         date: new Date(),
-//         total: basket.reduce((total, item) => total + item.price * item.amount, 0),
-//         status: 'waiting_payment',
-//         uuid: uuidv4()
-//     };
-// }
-
 function getOrder(orderId, userId) {
     const orders = shopusers.find(user => user.id === userId).orders;
     return orders.find(order => order.id === orderId);
 }
+
+function getAccountAmount(number) {
+    if (number === undefined || number === "") return {error: 1, status: 404, data: 'empty number'}
+    let account = bankaccounts.find(e => e.number === number)
+    if (!account) return {error: 1, status: 404, data: 'unknown account'}
+    return {error: 0, data: account.amount}
+}
+
+// function getTransactions(number) {
+//     if (number === undefined || number === "") return {error: 1, status: 404, data: 'empty number'}
+//     let account = bankaccounts.find(e => e.number === number)
+//     if (!account) return {error: 1, status: 404, data: 'unknown account'}
+//     let transactionsList = transactions.filter(e => e.account === account._id)
+//     return {error: 0, status: 200, data: transactionsList}
+// }
+
+function getAccount(number) {
+    console.log("je get le compte")
+    if (number === "" || number === undefined) return {error: 1, status: 404, data: 'empty number'};
+    const res = bankaccounts.find((account) => account.number === number);
+    console.log(res)
+    if (!res) return {error: 1, status: 404, data: 'account doesn"t exists'};
+    console.log("je suis mort")
+    return {error: 0, status: 200, data: res};
+}
+
+function getTransactions(id_account) {
+    console.log("je récupère les transactions")
+    if (id_account === "" || id_account === undefined) return {error: 1, status: 404, data: 'empty number'};
+    const res = transactions.filter((trans) => trans.account === id_account || trans.destination === id_account);
+    if (!res) return {error: 1, status: 404, data: 'account doesn"t exists'};
+    console.log("je suis mort")
+    return {error: 0, status: 200, data: res};
+}
+
+function createWithdraw(id_account, amount) {
+    console.log("je suis dans le createWithdraw")
+    const account = bankaccounts.find(e => e._id === id_account);
+    if (!account) return {error: 1, status: 404, data: 'invalid account id'};
+
+    if (amount <= 0 || account.amount < amount) return {
+        error: 1,
+        status: 404,
+        data: 'invalid amount or insufficient balance'
+    };
+
+    const transaction = {
+        _id: uuidv4(),
+        amount: -amount,
+        account: id_account,
+        destination: null,
+        date: {"$date": new Date().toISOString()},
+        uuid: uuidv4()
+    };
+
+    console.log(transaction)
+    transactions.push(transaction);
+
+    account.amount -= amount;
+
+    console.log("je suis mort")
+    return {error: 0, status: 200, data: {uuid: transaction.uuid, amount: account.amount}};
+}
+
+function createPayment(id_account, amount, destination) {
+    console.log("je suis dans le createPayment")
+    const account = bankaccounts.find(e => e._id === id_account);
+    if (!account) return {error: 1, status: 404, data: 'invalid account id'};
+    if (!destination) return {error: 1, status: 404, data: 'invalid destination'};
+
+    if (amount <= 0 || account.amount < amount) return {
+        error: 1,
+        status: 404,
+        data: 'invalid amount or insufficient balance'
+    };
+
+    const transaction = {
+        _id: uuidv4(),
+        amount: -amount,
+        account: id_account,
+        destination: destination,
+        date: {"$date": new Date().toISOString()},
+        uuid: uuidv4()
+    };
+
+    console.log(transaction)
+    transactions.push(transaction);
+
+    account.amount -= amount;
+
+    console.log("je suis mort")
+    return {error: 0, status: 200, data: {uuid: transaction.uuid, amount: account.amount}};
+
+}
+
 
 export default {
     shopLogin,
     getAllViruses,
     getAccountAmount,
     getTransactions,
-    // createOrderFromBasket,
-    getOrder
+    getOrder,
+    getAccount,
+    createWithdraw,
+    createPayment
 }

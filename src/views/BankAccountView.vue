@@ -60,7 +60,11 @@ export default {
     number: ''
   }),
   computed: {
-    ...mapState(['accountAmount', 'accountTransactions', 'accountNumberError']),
+    ...mapState({
+      accountNumberError: state => state.bank.accountNumberError,
+      accountAmount: state => state.bank.accountAmount,
+      accountTransactions: state => state.bank.accountTransactions
+    }),
     isAccountNumberValid() {
       const regex = /^[A-Za-z0-9]{22}-[0-9]{7}$/;
       return regex.test(this.number)
