@@ -14,9 +14,15 @@ export default {
   data() {
     return {
       orderId: this.$route.params.orderId || '',
-      orderIndex: this.$route.params.orderIndex || null,
-      orders: this.$store.state.shop.shopUser.orders
-    };
+    }
+  },
+  computed: {
+    orderIndex() {
+      return this.$route.params.orderIndex;
+    },
+    orders() {
+      return this.$store.state.shop.shopUser.orders;
+    }
   },
   methods: {
     payOrder() {
