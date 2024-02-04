@@ -21,3 +21,4 @@
 - fixer cette navbar de mort avec le logout qui apparaît alors qu'on est pas connecté
 - changer les objectKey en ...mapState(['shopUser'])
 - corriger ce putain de accountamount qui s'affiche pas
+- mettre le vertical menu

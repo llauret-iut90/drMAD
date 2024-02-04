@@ -4,25 +4,25 @@
     <!--        <p> {{ items }}</p>-->
     <hr>
     <div>
-      <span>Filters :</span><label for="filterpriceactive">Per price</label><input type="checkbox"
-                                                                                   v-model="filterPriceActive"
-                                                                                   id="filterpriceactive">
+      <span>Filtres :</span><label for="filterpriceactive">Par prix</label><input type="checkbox"
+                                                                                  v-model="filterPriceActive"
+                                                                                  id="filterpriceactive">
 
-      <span>Filters :</span><label for="filterNameActive">Per name</label><input type="checkbox"
-                                                                                 v-model="filterNameActive"
-                                                                                 id="filterNameActive">
+      <span>Filtres :</span><label for="filterNameActive">Par nom</label><input type="checkbox"
+                                                                                v-model="filterNameActive"
+                                                                                id="filterNameActive">
       <span>
-        <label for="filterstock">See viruses that are in stock ?</label>
+        <label for="filterstock">Voir les virus en stock ?</label>
         <input id="filterstock" type="checkbox" v-model="stockData">
       </span>
     </div>
     <div>
       <div v-if="filterPriceActive">
-        <label for="filterprice">Price less than :</label>
+        <label for="filterprice">Prix moins que :</label>
         <input v-model="priceFilter" id="filterprice" type="number" @keypress="allowNumbersOnly" min="0" step="500">
       </div>
       <div v-if="filterNameActive">
-        <label for="filtername">Name containing :</label>
+        <label for="filtername">Contenant les lettres :</label>
         <input v-model="nameFilter" id="filtername" type="text">
       </div>
 
@@ -31,8 +31,8 @@
           :fields="['name', 'price','promotion']"
           :itemCheck="true"
           :checked="selectedItems"
-          :itemButton="{show: true, text: 'Add to cart'}"
-          :listButton="{show: true, text: 'Add all to cart'}"
+          :itemButton="{show: true, text: 'Ajouter au panier'}"
+          :listButton="{show: true, text: 'Tout ajouter au panier'}"
           :cancel-button="{show: false}"
           :itemAmount="true"
           @check-toggled="handleCheckChanged"
@@ -152,7 +152,6 @@ export default {
 </script>
 <style scoped>
 
-/* ./src/index.css */
 button {
   background-color: #000;
   color: #00ff00;

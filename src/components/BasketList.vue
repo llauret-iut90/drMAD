@@ -2,8 +2,8 @@
   <checked-list
       :data="currentBasket.items"
       :fields="['item.name', 'amount', 'Price']"
-      :item-button="{show: true, text: 'Remove'}"
-      :list-button="{show: true, text: 'Buy'}"
+      :item-button="{show: true, text: 'Supprimer'}"
+      :list-button="{show: true, text: 'Acheter'}"
       :cancel-button="{show: false}"
       @item-button-clicked="deleteItemFromBasket"
       @list-button-clicked="basketToOrder"

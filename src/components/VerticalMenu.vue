@@ -4,11 +4,11 @@
       <template v-if="item.type === 'title'">
         <slot name="menu-title" :label="item.label">{{ item.label }}</slot>
       </template>
-      <span v-else-if="item.type === 'link'" @click="goTo(item.to)">
+      <button v-else-if="item.type === 'button'" @click="goTo(item.to)">
         <slot name="menu-link" :label="item.label">
-          <button>{{ item.label }}</button>
+          {{ item.label }}
         </slot>
-      </span>
+      </button>
     </div>
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
   props: {items: Array},
   methods: {
     goTo(dest) {
-      this.$router.push(dest);
+      if (this.$route.path !== dest) this.$router.push(dest);
     }
   }
 }
@@ -37,10 +37,21 @@ export default {
 }
 
 .vertical-menu button {
-  background-color: #000;
-  color: #fff;
+  background-color: #4CAF50;
+  color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
   cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.vertical-menu button:hover {
+  background-color: #45a049;
+  color: white;
 }
 </style>
