@@ -1,19 +1,12 @@
 <template>
   <div>
-    <slot name="account-amount" :balance="balance">
-      <input type="text" :value="balance" readonly/>
-    </slot>
+    <slot name="account-amount"></slot>
   </div>
 </template>
 
 <script>
 export default {
   name: 'BankAmount',
-  props: {balance: Number}
-  // data() {
-  //   return {
-  //     balance: this.$route.params.balance + " €" || 0,
-  //   }
-  // },
+  // props: {balance: Number}
 }
 </script>

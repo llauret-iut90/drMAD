@@ -18,6 +18,6 @@
 
 - Mettre en français les noms
 - manipulation directe de la source de données locale, sans passer par le contrôleur et les services. à corriger
-- fixer cette navbar de mort
+- fixer cette navbar de mort avec le logout qui apparaît alors qu'on est pas connecté
 - changer les objectKey en ...mapState(['shopUser'])
 - corriger ce putain de accountamount qui s'affiche pas

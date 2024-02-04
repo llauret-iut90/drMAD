@@ -89,11 +89,14 @@ export default {
     test() {
       console.log("salut")
     },
-    async getAccountCredentials(number) {
-      await this.$store.dispatch('getAccount', number)
-      await this.$store.dispatch('getAccountAmount', number)
-      console.log("je suis le accountAmount de getAccountcredentials " + this.accountAmount)
-      await this.$router.push({name: 'bank', params: {balance: this.accountAmount}})
+    getAccountCredentials(number) {
+      this.$store.dispatch('getAccount', number)
+      console.log("je suis le account de getAccountcredentials " + this.account)
+      this.$store.dispatch('getAccountAmount', number).then(() => {
+        console.log("je suis le accountAmount de getAccountcredentials " + this.accountAmount)
+        this.$router.push({name: 'bankamount'})
+            // , params: {balance: this.accountAmount}}
+      })
     }
   }
 }

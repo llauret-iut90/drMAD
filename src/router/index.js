@@ -6,10 +6,11 @@ import ShopOrders from "@/views/ShopOrders.vue";
 import ShopBuy from "@/views/ShopBuy.vue";
 import ShopPay from "@/views/ShopPay.vue";
 import ShopView from "@/views/ShopView.vue";
-import BankAmount from "@/views/BankAmount.vue";
+// import BankAmount from "@/views/BankAmount.vue";
 import BankHistory from "@/views/BankHistory.vue";
 import BankOperation from "@/views/BankOperation.vue";
 import BankView from "@/views/BankView.vue";
+import BankAmount from "@/views/BankAmount.vue";
 
 Vue.use(VueRouter)
 

@@ -1,19 +1,20 @@
 <template>
   <div>
     <BankHome/>
+
     <NavBar class="fixed-navbar" :links="menuItems">
       <template v-slot:nav-button="{ label }">
         <span>{{ label }}</span>
       </template>
     </NavBar>
 
-    <BankAmount :balance="balance">
-      <template v-slot:account-amount="{ balance }">
-        <input type="text" :value="`${balance} €`" :style="{ color: balance < 0 ? 'red' : 'green' }"
-               readonly/>
+    <BankAmount v-if="$route.path === '/bank/amount'" :balance="balance">
+      <template v-slot:account-amount>
+        <input type="text" :value="`${balance} €`" :style="{ color: balance < 0 ? 'red' : 'green' }" readonly/>
       </template>
     </BankAmount>
     <router-view/>
+
   </div>
 </template>
 
@@ -21,8 +22,8 @@
 import NavBar from '../components/NavBar.vue';
 // import VerticalMenu from '../components/VerticalMenu.vue';
 import BankAmount from '../views/BankAmount.vue';
-// import {mapState} from "vuex";
 import BankHome from "@/views/BankHome.vue";
+import {mapState} from "vuex";
 
 export default {
   name: 'BankView',
@@ -33,9 +34,9 @@ export default {
     BankAmount
   },
   computed: {
-    // ...mapState({
-    //   shopUser: state => state.shop.shopUser,
-    // }),
+    ...mapState({
+      balance: state => state.bank.accountAmount,
+    }),
     navLinks() {
       // console.log('je suis connecte');
       // console.log(this.shopUser.login);
@@ -47,7 +48,6 @@ export default {
   },
   data() {
     return {
-      balance: this.$route.params.balance || 0,
       menuItems: [
         {label: 'Mon compte', to: '/bank/account'},
         // {type: 'title', label: 'Opérations', to: '/bank/operation'},
