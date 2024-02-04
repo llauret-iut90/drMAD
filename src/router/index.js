@@ -1,16 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ShopLoginView from "@/views/ShopLoginView.vue";
-import BankAccountView from "@/views/BankAccountView.vue";
-import ShopOrders from "@/views/ShopOrders.vue";
-import ShopBuy from "@/views/ShopBuy.vue";
-import ShopPay from "@/views/ShopPay.vue";
-import ShopView from "@/views/ShopView.vue";
-// import BankAmount from "@/views/BankAmount.vue";
-import BankHistory from "@/views/BankHistory.vue";
-import BankOperation from "@/views/BankOperation.vue";
-import BankView from "@/views/BankView.vue";
-import BankAmount from "@/views/BankAmount.vue";
 
 Vue.use(VueRouter)
 
@@ -22,55 +11,55 @@ const routes = [
     },
     {
         path: '/shop',
-        component: ShopView,
+        component: () => import('../views/ShopView.vue'),
         children: [
             {
                 path: 'buy',
                 name: 'shopbuy',
-                component: ShopBuy
+                component: () => import('../views/ShopBuy.vue')
             },
             {
                 path: 'pay',
                 name: 'shoppay',
-                component: ShopPay,
+                component: () => import('../views/ShopPay.vue'),
                 props: true
             },
             {
                 path: 'login',
                 name: 'shoplogin',
-                component: ShopLoginView
+                component: () => import('../views/ShopLoginView.vue')
             },
             {
                 path: 'orders',
                 name: 'shoporders',
-                component: ShopOrders
+                component: () => import('../views/ShopOrders.vue')
             }
         ]
     },
     {
         path: '/bank',
         name: 'bank',
-        component: BankView,
+        component: () => import('../views/BankView.vue'),
         children: [
             {
                 path: 'account',
                 name: 'bankaccount',
-                component: BankAccountView
+                component: () => import('../views/BankAccountView.vue')
             },
             {
                 path: 'amount',
                 name: 'bankamount',
-                component: BankAmount
+                component: () => import('../views/BankAmount.vue')
             },
             {
                 path: 'history',
                 name: 'bankhistory',
-                component: BankHistory
+                component: () => import('../views/BankHistory.vue')
             },
             {
                 path: 'operation',
                 name: 'bankoperation',
-                component: BankOperation
+                component: () => import('../views/BankOperation.vue')
             }
         ]
     }

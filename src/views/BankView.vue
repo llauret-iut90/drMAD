@@ -36,6 +36,7 @@ export default {
   computed: {
     ...mapState({
       balance: state => state.bank.accountAmount,
+      account: state => state.bank.accountNumber,
     }),
     navLinks() {
       // console.log('je suis connecte');

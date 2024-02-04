@@ -14,7 +14,8 @@
       <p>Account number is invalid</p>
     </div>
     <div v-if="account">
-      <p> Salut {{ account }} {{ accountAmount }} </p>
+      <p> Bonjour {{ account }} </p>
+      <!--      <p> test {{ accountAmount }}</p>-->
     </div>
 
     <!--    <div>-->
@@ -95,7 +96,7 @@ export default {
       this.$store.dispatch('getAccountAmount', number).then(() => {
         console.log("je suis le accountAmount de getAccountcredentials " + this.accountAmount)
         this.$router.push({name: 'bankamount'})
-            // , params: {balance: this.accountAmount}}
+        // , params: {balance: this.accountAmount}}
       })
     }
   }

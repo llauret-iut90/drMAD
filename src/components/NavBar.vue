@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     goTo(dest) {
-      this.$router.push(dest);
+      // this.$router.push(dest);
+      if (this.$route.path !== dest) this.$router.push(dest);
     },
     logout() {
       console.log('logout');
