@@ -56,6 +56,8 @@ const actions = {
     },
     async resetAccountNumber({commit}) {
         commit('updateAccountNumber', '')
+        commit('updateAccountNumberError', 0)
+        commit('updateAccountAmount', 0)
     },
     async createWithdraw({commit}, {id_account, amount}) {
         console.log('création du retrait');

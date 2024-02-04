@@ -7,7 +7,7 @@
       >
         <slot name="nav-button" :label="link.label">{{ link.label }}</slot>
       </button>
-      <button v-if="Object.keys(shopUser).length > 0"
+      <button v-if="this.shopUser"
               @click="logout"
       >Logout
       </button>
@@ -15,13 +15,15 @@
   </nav>
 </template>
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: 'NavBar',
   props: {links: Array},
   computed: {
-    shopUser() {
-      return this.$store.state.shop.shopUser
-    },
+    ...mapState({
+      shopUser: state => state.shop.shopUser,
+    }),
   },
   methods: {
     goTo(dest) {

@@ -15,18 +15,18 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import NavBar from "@/components/NavBar.vue";
 
 export default {
   name: 'App',
   components: {NavBar},
   computed: {
-    shopUser() {
-      return this.$store.state.shop.shopUser
-    },
+    ...mapState({
+      shopUser: state => state.shop.shopUser,
+    }),
     links() {
-      if (Object.keys(this.shopUser).length > 0) {
+      if (this.shopUser) {
         return [
           {label: 'Boutique', to: '/shop'},
           {label: 'Compte bancaire', to: '/bank'},

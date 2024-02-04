@@ -1,7 +1,7 @@
 <template>
   <div>
     <BankHome/>
-    <NavBar class="fixed-navbar" :links="navLinks">
+    <NavBar class="fixed-navbar" :links="menuItems">
       <template v-slot:nav-button="{ label }">
         <span>{{ label }}</span>
       </template>
@@ -21,7 +21,7 @@
 import NavBar from '../components/NavBar.vue';
 // import VerticalMenu from '../components/VerticalMenu.vue';
 import BankAmount from '../views/BankAmount.vue';
-import {mapState} from "vuex";
+// import {mapState} from "vuex";
 import BankHome from "@/views/BankHome.vue";
 
 export default {
@@ -33,33 +33,29 @@ export default {
     BankAmount
   },
   computed: {
-    ...mapState({
-      shopUser: state => state.shop.shopUser,
-    }),
+    // ...mapState({
+    //   shopUser: state => state.shop.shopUser,
+    // }),
     navLinks() {
-      if (this.shopUser) {
-        console.log('je suis connecte');
-        console.log(this.shopUser.login);
-        return [
-          {label: 'Mon compte', to: '/bank/account'},
-        ]
-      } else {
-        return []
-      }
+      // console.log('je suis connecte');
+      // console.log(this.shopUser.login);
+      return [
+        {label: 'Mon compte', to: '/bank/account'},
+      ]
     },
 
   },
   data() {
     return {
-      balance: this.$route.params.balance || 0
-      // accountAmount: 0
-      // menuItems: [
-      //   {type: 'title', label: 'Opérations'},
-      //   {type: 'button', label: 'Solde', to: '/bank/amount'},
-      //   {type: 'button', label: 'Débit/Virement', to: '/bank/operation'},
-      //   {type: 'title', label: 'États'},
-      //   {type: 'button', label: 'Historique', to: '/bank/history'}
-      // ]
+      balance: this.$route.params.balance || 0,
+      menuItems: [
+        {label: 'Mon compte', to: '/bank/account'},
+        // {type: 'title', label: 'Opérations', to: '/bank/operation'},
+        {type: 'button', label: 'Solde', to: '/bank/amount'},
+        {type: 'button', label: 'Débit/Virement', to: '/bank/operation'},
+        // {type: 'title', label: 'États'},
+        {type: 'button', label: 'Historique', to: '/bank/history'}
+      ]
     }
   },
   // created() {
