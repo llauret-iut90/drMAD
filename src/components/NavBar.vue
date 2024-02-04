@@ -7,10 +7,6 @@
       >
         <slot name="nav-button" :label="link.label">{{ link.label }}</slot>
       </button>
-      <button v-if="this.shopUser"
-              @click="logout"
-      >Logout
-      </button>
     </div>
   </nav>
 </template>
@@ -27,13 +23,7 @@ export default {
   },
   methods: {
     goTo(dest) {
-      // this.$router.push(dest);
       if (this.$route.path !== dest) this.$router.push(dest);
-    },
-    logout() {
-      console.log('logout');
-      this.$store.dispatch('logout')
-      this.$router.push('/shop/login');
     },
   }
 }

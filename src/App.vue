@@ -6,6 +6,7 @@
         <img v-else-if="label === 'Compte bancaire'" src="@/assets/bank-icon.jpg" alt="Bank" style="width: 20px">
       </template>
     </NavBar>
+    <button v-if="!isEmpty(shopUser)" @click="logoutUser">Logout</button>
     <router-view/>
     <div style="color: aliceblue">
       <p v-if="shopUser"> {{ shopUser.login }}</p>
@@ -41,7 +42,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getAllViruses']),
+    ...mapActions(['getAllViruses', 'logout']),
+    logoutUser() {
+      this.logout();
+      this.$router.push('/shop/login');
+    },
+    isEmpty(obj) {
+      return Object.keys(obj).length === 0;
+    },
   },
   mounted() {
     this.getAllViruses()
@@ -49,4 +57,6 @@ export default {
 };
 </script>
 <style>
+#app {
+}
 </style>

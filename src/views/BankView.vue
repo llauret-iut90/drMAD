@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     ...mapState({
-      balance: state => state.bank.accountAmount,
+      balance: state => state.bank.accountNumber.amount,
       account: state => state.bank.accountNumber,
     }),
     navLinks() {

@@ -34,19 +34,28 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["createPayment"]),
+    ...mapActions(["createPayment", 'createWithdraw']),
     validateOperation() {
       console.log("validateOperation");
       console.log(this.account);
       console.log(this.amount);
       console.log(this.recipient);
-      this.createPayment({
-        id_account: this.account,
-        amount: this.amount,
-        destination: this.recipient,
-      }).then(() => {
-        this.operationMessage = "Opération validée";
-      })
+      if (this.isRecipientChecked) {
+        this.createPayment({
+          id_account: this.account,
+          amount: this.amount,
+          destination: this.recipient,
+        }).then(() => {
+          this.operationMessage = "Opération validée";
+        })
+      } else {
+        this.createWithdraw({
+          id_account: this.account,
+          amount: this.amount,
+        }).then(() => {
+          this.operationMessage = "Retrait effectué";
+        })
+      }
     },
     test() {
       // @change dans le input

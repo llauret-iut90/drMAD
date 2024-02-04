@@ -23,7 +23,7 @@
           {{ field === 'Price' ? calculatePrice(item) : getField(item, field) }}
         </td>
         <td v-if="itemAmount">
-          <input type="number" value="0" min="0"
+          <input type="number" value="0" min="1"
                  v-model="amounts[index]"
                  @change="$emit('amount-changed', index, $event.target.value)">
         </td>
@@ -76,6 +76,9 @@ export default {
       let value = item;
       for (let key of keys) {
         value = value[key];
+      }
+      if (field === 'promotion') {
+        return value.map(promo => promo.discount + '%').join(' | ');
       }
       return value;
     },

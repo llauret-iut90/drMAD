@@ -93,9 +93,9 @@ export default {
       }
       return filteredViruses;
     },
-    // promotion() {
-    //   return this.data.map(item => item[this.fields[2]].map(promo => promo.discount + '%').join(' | '));
-    // }
+    // discounts() {
+    //   return this.data.map(item => item.promotion.map(promo => promo.discount + '%').join(' | '));
+    // },
   },
   methods: {
     allowNumbersOnly(event) {

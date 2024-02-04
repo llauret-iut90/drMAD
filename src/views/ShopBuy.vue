@@ -14,13 +14,19 @@ import BasketList from '@/components/BasketList.vue'
 .shop-buy {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  min-width: 100%;
 }
 
 .shop-buy__items {
   width: 100%;
+  max-width: 100%;
+  align-self: flex-start;
 }
 
 .shop-buy__basket {
-  width: 50%;
+  width: 100%;
+  max-width: 30%;
+  align-self: flex-start;
 }
 </style>
