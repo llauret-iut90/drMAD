@@ -27,9 +27,7 @@ function shopLogin(data) {
 
 
     return {
-        error: 0,
-        status: 200,
-        data: {
+        error: 0, status: 200, data: {
             name: user.name,
             login: user.login,
             email: user.email,
@@ -55,7 +53,8 @@ function getAccountAmount(number) {
     console.log("number " + number)
     let account = bankaccounts.find(e => e.number === number)
     console.log("je suis dans le getAccountAmount")
-    console.log("compte " + account)
+    console.log("compte ")
+    console.log(account)
     if (!account) return {error: 1, status: 404, data: 'unknown account'}
     return {error: 0, data: account.amount}
 }
@@ -74,6 +73,9 @@ function getAccount(number) {
     const res = bankaccounts.find((account) => account.number === number);
     console.log(res)
     if (!res) return {error: 1, status: 404, data: 'account doesn"t exists'};
+
+    res.transactions = transactions.filter((trans) => trans.account === res._id || trans.destination === res._id);
+
     console.log("je suis mort")
     return {error: 0, status: 200, data: res};
 }
@@ -93,9 +95,7 @@ function createWithdraw(id_account, amount) {
     if (!account) return {error: 1, status: 404, data: 'invalid account id'};
 
     if (amount <= 0 || account.amount < amount) return {
-        error: 1,
-        status: 404,
-        data: 'invalid amount or insufficient balance'
+        error: 1, status: 404, data: 'invalid amount or insufficient balance'
     };
 
     const transaction = {
@@ -117,44 +117,57 @@ function createWithdraw(id_account, amount) {
 }
 
 function createPayment(id_account, amount, destination) {
-    console.log("je suis dans le createPayment")
-    const account = bankaccounts.find(e => e._id === id_account);
-    if (!account) return {error: 1, status: 404, data: 'invalid account id'};
-    if (!destination) return {error: 1, status: 404, data: 'invalid destination'};
+    try {
+        console.log("je suis dans le createPayment")
+        const account = bankaccounts.find(e => e._id === id_account);
+        console.log("compte ")
+        console.log(account)
+        const destinationAccount = bankaccounts.find(e => e._id === destination);
+        console.log("destination ")
+        console.log(destinationAccount)
+        if (!account) return {error: 1, status: 404, data: 'invalid account id'};
+        if (!destination) return {error: 1, status: 404, data: 'invalid destination'};
 
-    if (amount <= 0 || account.amount < amount) return {
-        error: 1,
-        status: 404,
-        data: 'invalid amount or insufficient balance'
-    };
+        if (amount <= 0 || account.amount < amount) return {
+            error: 1, status: 404, data: 'invalid amount or insufficient balance'
+        };
 
-    const transaction = {
-        _id: uuidv4(),
-        amount: -amount,
-        account: id_account,
-        destination: destination,
-        date: {"$date": new Date().toISOString()},
-        uuid: uuidv4()
-    };
+        const transaction = {
+            _id: uuidv4(),
+            amount: -amount,
+            account: id_account,
+            destination: destination,
+            date: {"$date": new Date().toISOString()},
+            uuid: uuidv4()
+        };
 
-    console.log(transaction)
-    transactions.push(transaction);
+        console.log(transaction)
 
-    account.amount -= amount;
+        account.transactions.push(transaction);
 
-    console.log("je suis mort")
-    return {error: 0, status: 200, data: {uuid: transaction.uuid, amount: account.amount}};
+        account.amount -= Number(amount);
+        destinationAccount.amount += Number(amount);
+        console.log("compte de destination")
+        console.log(destinationAccount)
 
+        console.log("je suis mort")
+        return {
+            error: 0, status: 200, data: {
+                _id: account._id,
+                uuid: transaction.uuid,
+                amount: amount,
+                destination: destinationAccount.number,
+                date: transaction.date,
+                // transaction: transaction
+            }
+        };
+    } catch (error) {
+        console.error('Erreur lors de la création du paiement :', error);
+        return {error: 1, status: 500, data: 'An error occurred while creating the payment'};
+    }
 }
 
 
 export default {
-    shopLogin,
-    getAllViruses,
-    getAccountAmount,
-    getTransactions,
-    getOrder,
-    getAccount,
-    createWithdraw,
-    createPayment
+    shopLogin, getAllViruses, getAccountAmount, getTransactions, getOrder, getAccount, createWithdraw, createPayment
 }

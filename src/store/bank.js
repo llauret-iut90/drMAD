@@ -12,7 +12,7 @@ const mutations = {
         state.accountAmount = amount
     },
     updateTransactions(state, transactions) {
-        state.accountTransactions = transactions
+        state.accountTransactions.push(transactions)
     },
     updateAccountNumberError(state, error) {
         state.accountNumberError = error
@@ -69,9 +69,15 @@ const actions = {
     async createPayment({commit}, {id_account, amount, destination}) {
         console.log('création du paiement');
         let response = await BankService.createPayment(id_account, amount, destination)
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         console.log(response)
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        console.log(response.data)
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        console.log("je suis dans le store de la bank dans createPayment et je suis mort")
         commit('updateAccountAmount', response.data.amount)
-        commit('updateTransactions', response.data.transactions)
+        commit('updateTransactions', response.data)
     }
 }
 
