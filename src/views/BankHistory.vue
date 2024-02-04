@@ -11,7 +11,7 @@
     <label for="start-date" v-if="filterByPeriod">Du</label>
 
     <input type="date" v-if="filterByPeriod" v-model="endDate" id="end-date"/>
-    <label for="end-date" v-if="filterByPeriod">Au</label>
+    <label for="end-date" v-if="filterByPeriod"></label>
 
     <data-table
         :headers="headers"
@@ -65,6 +65,12 @@ export default {
     };
   },
   watch: {
+    filterByPeriod(newVal) {
+      if (!newVal) {
+        this.startDate = null;
+        this.endDate = null;
+      }
+    },
     startDate(newStartDate, oldStartDate) {
       if (this.endDate && new Date(newStartDate) > new Date(this.endDate)) this.startDate = oldStartDate;
     },
@@ -111,3 +117,17 @@ export default {
   },
 };
 </script>
+<style scoped>
+input[type="date"] {
+  background-color: #000;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 3px;
+}
+
+label {
+  color: #00ff00;
+}
+</style>

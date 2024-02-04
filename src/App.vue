@@ -27,7 +27,7 @@ export default {
       shopUser: state => state.shop.shopUser,
     }),
     links() {
-      if (this.shopUser) {
+      if (!this.isEmpty(this.shopUser)) {
         return [
           {label: 'Boutique', to: '/shop'},
           {label: 'Compte bancaire', to: '/bank'},

@@ -8,7 +8,7 @@
 
     <div>
       <BankHome/>
-      <BankAmount v-if="$route.path === '/bank/amount'" :balance="balance">
+      <BankAmount v-if="$route.path === '/bank/amount' && balance !== undefined" :balance="balance">
         <template v-slot:account-amount>
           <input type="text" :value="`${balance} €`" :style="{ color: balance < 0 ? 'red' : 'green' }" readonly/>
         </template>
@@ -69,13 +69,13 @@ export default {
 
 <style scoped>
 .vertical-menu {
-  position: fixed; /* position fixe */
-  top: 0; /* aligné en haut */
-  left: 0; /* aligné à gauche */
-  height: 100%; /* hauteur complète */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
 
 .vertical-menu div {

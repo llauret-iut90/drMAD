@@ -35,7 +35,7 @@ const mutations = {
     },
     createOrder(state, order) {
         state.shopUser.orders.push(order);
-    }
+    },
 }
 
 const actions = {
@@ -115,16 +115,16 @@ const actions = {
         commit('createOrder', order);
         return order;
     },
-    // async finalizeOrder({state, commit}, orderId) {
-    //     let order = state.shopUser.orders.find(order => order.id === orderId);
-    //     if (!order) {
-    //         order = await ShopService.verifyOrder();
-    //     }
-    //     if (!order) {
-    //         throw new Error('Invalid order id');
-    //     }
-    //     commit('finalizeOrder', order);
-    // }
+    async finalizeOrder({state, commit}, orderId) {
+        let order = state.shopUser.orders.find(order => order.id === orderId);
+        if (!order) {
+            order = await ShopService.verifyOrder();
+        }
+        if (!order) {
+            throw new Error('Invalid order id');
+        }
+        commit('finalizeOrder', order);
+    }
 }
 
 const getters = {

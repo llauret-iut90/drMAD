@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     calculatePrice(item) {
-      return item.item.price * item.amount;
+      return item.item.price * item.amount * (1 - item.item.promotion[0].discount / 100);
     },
     getField(item, field) {
       const keys = field.split('.');
@@ -79,6 +79,9 @@ export default {
       }
       if (field === 'promotion') {
         return value.map(promo => promo.discount + '%').join(' | ');
+      }
+      if (field === 'Price') {
+        return this.calculatePrice(item);
       }
       return value;
     },
