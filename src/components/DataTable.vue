@@ -13,7 +13,9 @@
         <td v-if="itemCheck">
           <input type="checkbox" @change="$emit('itemCheckChanged', index)">
         </td>
-        <td v-for="header in headers" :key="header.name">{{ item[header.name] }}</td>
+        <slot name="items" :item="item">
+          <td v-for="header in headers" :key="header.name">{{ item[header.name] }}</td>
+        </slot>
         <td v-if="itemButton">
           <button @click="$emit('itemClicked', index)">Button</button>
         </td>
@@ -53,5 +55,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
 </style>

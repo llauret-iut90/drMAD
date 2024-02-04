@@ -3,65 +3,111 @@
     <slot name="title">
       <h1>Opérations passées</h1>
     </slot>
-<!--    <div>-->
-<!--      <input type="checkbox" v-model="filterByPeriod">-->
-<!--      <label>Filtrer par période</label>-->
-<!--      <div v-if="filterByPeriod">-->
-<!--        <input type="date" v-model="fromDate" @input="filterTransactions">-->
-<!--        <label>Du</label>-->
-<!--        <input type="date" v-model="toDate" @input="filterTransactions">-->
-<!--        <label>Au</label>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <DataTable :headers="headers" :items="filteredTransactions" :itemCheck="true" :itemButton="true"-->
-<!--               @itemClicked="showTransaction"/>-->
-<!--    <button @click="showCheckedTransactions">Voir</button>-->
+
+    <input type="checkbox" v-model="filterByPeriod" id="filter"/>
+    <label for="filter">Filtrer par période </label>
+
+    <input type="date" v-if="filterByPeriod" v-model="startDate" id="start-date"/>
+    <label for="start-date" v-if="filterByPeriod">Du</label>
+
+    <input type="date" v-if="filterByPeriod" v-model="endDate" id="end-date"/>
+    <label for="end-date" v-if="filterByPeriod">Au</label>
+
+    <data-table
+        :headers="headers"
+        :items="filteredTransactions"
+        item-key="_id"
+        show-select
+        class="elevation-1"
+    >
+
+      <template v-slot:items="props">
+        <td>{{ props.item.amount }}</td>
+        <td>{{ formatDate(props.item.date.$date) }}</td>
+        <td>{{ props.item.account }}</td>
+        <td>
+          <input type="checkbox" v-model="props.item.selected">
+          <button @click="openDialog(props.item)">Voir</button>
+        </td>
+      </template>
+    </data-table>
+
+    <button @click="openDialogForSelected">Voir</button>
+
+    <dialog :open="dialog" @close="dialog = false">
+      <div>
+        <h2>UUID de la transaction</h2>
+        <p>{{ dialogText }}</p>
+      </div>
+    </dialog>
   </div>
 </template>
 
 <script>
-// import {ref, computed} from 'vue';
-// import DataTable from '../components/DataTable.vue';
+import {mapState} from "vuex";
+import DataTable from "@/components/DataTable.vue";
 
 export default {
-  // components: {
-  //   DataTable
-  // },
-  // setup() {
-  //   const filterByPeriod = ref(false);
-  //   const fromDate = ref('');
-  //   const toDate = ref('');
-  //   const headers = [
-  //     {label: 'Montant', name: 'amount'},
-  //     {label: 'Date', name: 'date'},
-  //     {label: 'Lettre', name: 'letter'},
-  //   ];
-  //
-  //   const filterTransactions = () => {
-  //   };
-  //
-  //   const showTransaction = (index) => {
-  //   };
-  //
-  //   const showCheckedTransactions = () => {
-  //   };
-  //
-  //   const filteredTransactions = computed(() => {
-  //   });
-  //
-  //   return {
-  //     filterByPeriod,
-  //     fromDate,
-  //     toDate,
-  //     headers,
-  //     filterTransactions,
-  //     showTransaction,
-  //     showCheckedTransactions,
-  //     filteredTransactions
-  //   };
-  // }
-}
-</script>
+  components: {DataTable},
+  data() {
+    return {
+      filterByPeriod: false,
+      startDate: null,
+      endDate: null,
+      dialog: false,
+      dialogText: '',
+      headers: [
+        {label: 'Montant', value: 'amount'},
+        {label: 'Date', value: 'date'},
+        {label: 'Destination', value: 'type'},
+        {label: 'Action', value: 'action', sortable: false},
+      ],
+    };
+  },
+  watch: {
+    startDate(newStartDate, oldStartDate) {
+      if (this.endDate && new Date(newStartDate) > new Date(this.endDate)) this.startDate = oldStartDate;
+    },
+    endDate(newEndDate, oldEndDate) {
+      if (this.startDate && new Date(newEndDate) < new Date(this.startDate)) this.endDate = oldEndDate;
+    },
+  },
+  computed: {
+    ...mapState({
+      transactions: (state) => state.bank.accountNumber.transactions,
+    }),
+    filteredTransactions() {
+      console.log("JE SUIS DANS LE COMPUTED");
+      console.log(this.transactions);
+      return this.transactions.filter((transaction) => {
+        console.log("JE SUIS DANS LE FILTER");
+        console.log(transaction);
+        console.log("JE SUIS MORT");
+        const transactionDate = new Date(transaction.date.$date);
+        const startDate = this.startDate ? new Date(this.startDate) : null;
+        const endDate = this.endDate ? new Date(this.endDate) : null;
 
-<style scoped>
-</style>
+        if (startDate && transactionDate < startDate) return false;
+        return !(endDate && transactionDate > endDate);
+      });
+    },
+  },
+  methods: {
+    openDialog(transaction) {
+      console.log(this.filteredTransactions);
+      this.dialogText = transaction.uuid;
+      this.dialog = true;
+    },
+    openDialogForSelected() {
+      console.log("test");
+      const selectedTransactions = this.filteredTransactions.filter(t => t.selected);
+      this.dialogText = selectedTransactions.map(t => `- ${t.uuid}`).join('\n\n');
+      this.dialog = true;
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString)
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    }
+  },
+};
+</script>
